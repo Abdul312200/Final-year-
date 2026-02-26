@@ -23,6 +23,38 @@ const useChatLogic = (lang) => {
   const [isTyping,    setIsTyping]    = useState(false);
   const [suggestions, setSuggestions] = useState([]);
 
+  // ── Client-side prediction/analysis interceptor ──────────────────
+  const tryLocalResponse = (text, lang) => {
+    const t = text.toLowerCase();
+    const isPredictCmd  = /\bpredict\b|\bforecast\b|price prediction/.test(t);
+    const isAnalyzeCmd  = /\banalyze\b|\banalyse\b|\banalysis\b/.test(t);
+    const isCompareCmd  = /\bcompare\b/.test(t);
+    const isReliance    = /reliance/.test(t);
+    const isTCS         = /\btcs\b/.test(t);
+    const tickerMatch   = text.match(/\b([A-Z]{2,5})\b/);
+    const ticker        = tickerMatch ? tickerMatch[1] : 'a stock';
+
+    if (isPredictCmd || isAnalyzeCmd || isCompareCmd) {
+      const enMsg = isPredictCmd
+        ? `📈 For AI-powered stock predictions, head to the **Stock Prediction** page! It gives you price forecasts, charts, and buy/sell signals for ${ticker}.`
+        : isAnalyzeCmd
+        ? `🔍 For detailed stock analysis of ${ticker}, use the **Stock Prediction** tool — it shows trends, sentiment, and investment advice.`
+        : `⚖️ For stock comparisons, visit the **Stock Prediction** page and switch between stocks to compare their forecasts.`;
+      const taMsg = isPredictCmd
+        ? `📈 AI-சார்ந்த பங்கு கணிப்புகளுக்கு **Stock Prediction** பக்கத்திற்கு செல்லுங்கள்! ${ticker}-க்கான விலை முன்னறிவிப்பு, விளக்கப்படங்கள் மற்றும் வாங்கல்/விற்றல் சமிக்ஞைகள் கிடைக்கும்.`
+        : `🔍 ${ticker} பங்கு பகுப்பாய்வுக்கு **Stock Prediction** கருவியைப் பயன்படுத்துங்கள்.`;
+      return lang === 'en' ? enMsg : taMsg;
+    }
+
+    if (isReliance || isTCS) {
+      return lang === 'en'
+        ? `📊 For live **${isReliance ? 'RELIANCE' : 'TCS'}** prices and AI predictions, go to the **Stock Prediction** page and select it from the Indian Stocks list!`
+        : `📊 நேரடி விலை மற்றும் கணிப்புக்கு **Stock Prediction** பக்கத்திற்கு செல்லுங்கள்!`;
+    }
+
+    return null; // let it go to backend
+  };
+
   const sendMessage = useCallback(async (msgText) => {
     const text = (msgText || input).trim();
     if (!text || isTyping) return;
@@ -30,6 +62,15 @@ const useChatLogic = (lang) => {
     setMessages(p => [...p, { sender: 'user', text, time: new Date() }]);
     if (!msgText) setInput('');
     setIsTyping(true);
+
+    // Handle prediction/analysis commands locally — backend can't process them
+    const localReply = tryLocalResponse(text, lang);
+    if (localReply) {
+      await new Promise(r => setTimeout(r, 600));
+      setMessages(p => [...p, { sender: 'bot', text: localReply, time: new Date() }]);
+      setIsTyping(false);
+      return;
+    }
 
     try {
       const { data } = await axios.post(`${BACKEND_URL}/api/chatbot`, {
