@@ -65,7 +65,7 @@ import {
   XAxis, YAxis, Tooltip, CartesianGrid,
 } from "recharts";
 
-const ML_URL = import.meta.env.VITE_ML_URL || "https://final-year-backend-2.onrender.com";
+const API_URL = import.meta.env.VITE_API_URL || "https://final-year-backend-1.onrender.com";
 
 /* ─── Mock prices (used when backend is offline) ─── */
 const MOCK_PRICES = {
@@ -300,17 +300,17 @@ export default function StockPrediction() {
 
     try {
       // ── Try real backend first (1-second timeout to fail fast) ──
-      const pred = await axios.post(`${ML_URL}/predict`,
+      const pred = await axios.post(`${API_URL}/predict`,
         { ticker: symbol, input_days: days, algorithm: "lstm" },
         { timeout: 4000 }
       );
       setCurrentPrice(pred.data.current_price);
       setPredictedPrice(pred.data.predicted_price);
 
-      const history = await axios.get(`${ML_URL}/history/${symbol}`, { timeout: 4000 });
+      const history = await axios.get(`${API_URL}/history/${symbol}`, { timeout: 4000 });
       setHistoryData(history.data.dates.map((date, i) => ({ date, price: history.data.close[i] })));
 
-      const advice = await axios.get(`${ML_URL}/investment-advice/${symbol}`, { timeout: 4000 });
+      const advice = await axios.get(`${API_URL}/investment-advice/${symbol}`, { timeout: 4000 });
       setInvestmentAdvice(advice.data.advice);
       setAdviceMeta({ change_pct: advice.data.change_pct, volatility: advice.data.volatility });
 

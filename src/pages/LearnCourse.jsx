@@ -3,6 +3,8 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 
 import BudgetingBasics from "./courses/BudgetingBasics";
+
+const API_URL = import.meta.env.VITE_API_URL || "https://final-year-backend-1.onrender.com";
 import Investment101 from "./courses/Investment101";
 import BankingEssentials from "./courses/BankingEssentials";
 import TradingBasics from "./courses/TradingBasics";
@@ -127,7 +129,7 @@ export default function LearnCourse() {
     if (moduleFromState) return;
     setLoading(true);
 
-    fetch(`https://final-year-backend-2.onrender.com/api/learn/modules?lang=${lang}`)
+    fetch(`${API_URL}/api/learn/modules?lang=${lang}`)
       .then((res) => res.json())
       .then((data) => setModules(Array.isArray(data?.modules) ? data.modules : []))
       .catch(() => setModules([]))

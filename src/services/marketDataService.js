@@ -4,9 +4,10 @@
  * Strategy: try direct → try CORS proxy → return static fallback.
  */
 
+const API_URL = import.meta.env.VITE_API_URL || "https://final-year-backend-1.onrender.com";
 const YAHOO_BASE = 'https://query1.finance.yahoo.com/v7/finance/quote';
-const YAHOO_LOCAL = 'https://final-year-backend-2.onrender.com/api/yahoo/v7/finance/quote';
-const BACKEND_OVERVIEW = 'https://final-year-backend-2.onrender.com/api/market/overview';
+const YAHOO_LOCAL = `${API_URL}/api/yahoo/v7/finance/quote`;
+const BACKEND_OVERVIEW = `${API_URL}/api/market/overview`;
 
 // ── Helpers ──────────────────────────────────────────────────────────────
 
