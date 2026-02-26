@@ -31,7 +31,7 @@ function StatItem({ value, suffix, label }) {
 export default function Hero() {
   const { lang } = useLanguage();
   const navigate = useNavigate();
-  const YOUTUBE_URL = 'https://www.youtube.com/@p.bstatusworld1010';
+  const YOUTUBE_URL = 'https://youtube.com/@ddnifty?si=zyuxXcsy6-ZTYLsh';
 
   const t = {
     en: {
