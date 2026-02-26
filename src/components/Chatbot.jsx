@@ -5,7 +5,7 @@ import axios from 'axios';
 import images from '../assets';
 
 // ── Backend URL ─────────────────────────────────────────────────────
-const BACKEND_URL = import.meta.env.VITE_API || 'http://localhost:5000';
+const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://final-year-backend-1.onrender.com';
 
 // ── Persistent user ID (survives page refresh) ──────────────────────
 const USER_ID = (() => {
