@@ -300,19 +300,26 @@ export default function StockPrediction() {
 
     try {
       // ── Try real backend first (1-second timeout to fail fast) ──
-      const pred = await axios.post(`${API_URL}/predict`,
+      const pred = await axios.post(`${API_URL}/api/predict`,
         { ticker: symbol, input_days: days, algorithm: "lstm" },
-        { timeout: 4000 }
+        { timeout: 8000 }
       );
       setCurrentPrice(pred.data.current_price);
       setPredictedPrice(pred.data.predicted_price);
 
-      const history = await axios.get(`${API_URL}/history/${symbol}`, { timeout: 4000 });
-      setHistoryData(history.data.dates.map((date, i) => ({ date, price: history.data.close[i] })));
-
-      const advice = await axios.get(`${API_URL}/investment-advice/${symbol}`, { timeout: 4000 });
-      setInvestmentAdvice(advice.data.advice);
-      setAdviceMeta({ change_pct: advice.data.change_pct, volatility: advice.data.volatility });
+      // Use /api/analyze for history + investment advice
+      const analysis = await axios.post(`${API_URL}/api/analyze`,
+        { ticker: symbol },
+        { timeout: 8000 }
+      );
+      const aData = analysis.data;
+      if (aData.history?.dates) {
+        setHistoryData(aData.history.dates.map((date, i) => ({ date, price: aData.history.close[i] })));
+      } else if (pred.data.history?.dates) {
+        setHistoryData(pred.data.history.dates.map((date, i) => ({ date, price: pred.data.history.close[i] })));
+      }
+      setInvestmentAdvice(aData.advice ?? aData.recommendation ?? "");
+      setAdviceMeta({ change_pct: aData.change_pct ?? pred.data.change_pct, volatility: aData.volatility ?? pred.data.volatility });
 
     } catch (_) {
       // ── Backend unavailable — use demo data, but inject live price if available ──

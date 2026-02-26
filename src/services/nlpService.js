@@ -48,8 +48,8 @@ class FinancialNLPService {
   async initialize() {
     // Check if backend is available
     try {
-      const response = await fetch(`${API_CONFIG.chatbotServer}/health`, {
-        timeout: 3000,
+      const response = await fetch(`${API_CONFIG.chatbotServer}/api/llm-status`, {
+        signal: AbortSignal.timeout(5000),
       });
       this.backendAvailable = response.ok;
       console.log('Backend available:', this.backendAvailable);
@@ -151,7 +151,7 @@ class FinancialNLPService {
   // Stock prediction features (requires backend ML service)
   async predictStock(ticker, days = 60) {
     try {
-      const response = await fetch(`${API_CONFIG.mlService}/predict`, {
+      const response = await fetch(`${API_CONFIG.mlService}/api/predict`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ticker, input_days: days }),
@@ -165,7 +165,11 @@ class FinancialNLPService {
 
   async analyzeStock(ticker) {
     try {
-      const response = await fetch(`${API_CONFIG.mlService}/analyze/${ticker}`);
+      const response = await fetch(`${API_CONFIG.mlService}/api/analyze`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ticker }),
+      });
       return await response.json();
     } catch (error) {
       console.error('Stock analysis failed:', error);
@@ -175,8 +179,10 @@ class FinancialNLPService {
 
   async getStockInfo(ticker) {
     try {
-      const response = await fetch(`${API_CONFIG.mlService}/info/${ticker}`);
-      return await response.json();
+      const response = await fetch(`${API_CONFIG.mlService}/api/stocks`);
+      const data = await response.json();
+      // Return info for the specific ticker if available
+      return Array.isArray(data) ? data.find(s => s.ticker === ticker) ?? data : data;
     } catch (error) {
       console.error('Stock info failed:', error);
       return null;
