@@ -376,15 +376,32 @@ body {
   transform: rotate(-45deg) translate(5px, -5px);
 }
 
+/* Mobile backdrop */
+.nav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 998;
+  animation: backdropIn 0.22s ease both;
+}
+
+@keyframes backdropIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 /* Mobile drawer */
 .nav-drawer {
   position: fixed;
-  inset: 68px 0 0;
-  background: rgba(255, 255, 255, 0.97);
+  top: 68px;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.99);
   backdrop-filter: blur(20px);
   z-index: 999;
   animation: drawerIn 0.22s ease both;
   border-top: 1px solid var(--border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
 }
 
 @keyframes drawerIn {
@@ -2083,6 +2100,7 @@ option {
 
   .nav-burger {
     display: flex;
+    margin-left: auto;
   }
 
   .hero-section {

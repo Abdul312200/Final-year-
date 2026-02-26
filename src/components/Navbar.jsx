@@ -86,6 +86,15 @@ export default function Navbar({ onChatToggle, chatOpen }) {
         </button>
       </div>
 
+      {/* ── Mobile backdrop ── */}
+      {menuOpen && (
+        <div
+          className="nav-backdrop"
+          onClick={() => setMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
       {/* ── Mobile drawer ── */}
       {menuOpen && (
         <div className="nav-drawer" role="dialog" aria-modal="true">
