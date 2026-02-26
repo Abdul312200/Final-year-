@@ -65,7 +65,7 @@ import {
   XAxis, YAxis, Tooltip, CartesianGrid,
 } from "recharts";
 
-const ML_URL = import.meta.env.VITE_ML_URL || "https://final-year-backend-1.onrender.com";
+const ML_URL = import.meta.env.VITE_ML_URL || "https://final-year-backend-2.onrender.com";
 
 /* ─── Mock prices (used when backend is offline) ─── */
 const MOCK_PRICES = {

@@ -5,8 +5,8 @@
  */
 
 const YAHOO_BASE = 'https://query1.finance.yahoo.com/v7/finance/quote';
-const YAHOO_LOCAL = 'http://127.0.0.1:5000/api/yahoo/v7/finance/quote';
-const BACKEND_OVERVIEW = 'http://127.0.0.1:5000/api/market/overview';
+const YAHOO_LOCAL = 'https://final-year-backend-2.onrender.com/api/yahoo/v7/finance/quote';
+const BACKEND_OVERVIEW = 'https://final-year-backend-2.onrender.com/api/market/overview';
 
 // ── Helpers ──────────────────────────────────────────────────────────────
 

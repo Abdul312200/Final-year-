@@ -2,7 +2,7 @@
 // Falls back to client-side processing if backend is unavailable
 
 // Backend API configuration
-const _BACKEND = import.meta.env.VITE_API_URL || 'https://final-year-backend-1.onrender.com';
+const _BACKEND = import.meta.env.VITE_API_URL || 'https://final-year-backend-2.onrender.com';
 const API_CONFIG = {
   chatbotServer: _BACKEND,
   priceAPI: _BACKEND,

@@ -3,7 +3,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useMarket } from '../context/MarketContext';
 import images from '../assets';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'https://final-year-backend-1.onrender.com';
+const API_BASE = import.meta.env.VITE_API_URL || 'https://final-year-backend-2.onrender.com';
 
 // Fetch live gold price (INR / 10g) from our backend → yfinance GC=F
 const useGoldRate = () => {

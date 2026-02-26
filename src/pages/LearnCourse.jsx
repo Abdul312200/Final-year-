@@ -127,7 +127,7 @@ export default function LearnCourse() {
     if (moduleFromState) return;
     setLoading(true);
 
-    fetch(`http://127.0.0.1:5000/api/learn/modules?lang=${lang}`)
+    fetch(`https://final-year-backend-2.onrender.com/api/learn/modules?lang=${lang}`)
       .then((res) => res.json())
       .then((data) => setModules(Array.isArray(data?.modules) ? data.modules : []))
       .catch(() => setModules([]))
