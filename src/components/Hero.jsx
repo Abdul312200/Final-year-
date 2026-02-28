@@ -31,8 +31,7 @@ function StatItem({ value, suffix, label }) {
 export default function Hero() {
   const { lang } = useLanguage();
   const navigate = useNavigate();
-  const YOUTUBE_URL = 'https://youtube.com/@ddnifty?si=zyuxXcsy6-ZTYLsh';
-
+  const YOUTUBE_URL = 'https://youtu.be/oHAB6f-P-K0?si=dKdvJXiRLgAxrDQd';
   const t = {
     en: {
       badge: ' AI Powered Financial Intelligence',
