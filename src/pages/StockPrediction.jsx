@@ -209,7 +209,7 @@ const HORIZON_OPTIONS = [
 ];
 
 /* ─── Custom chart tooltip ─── */
-const ChartTooltip = ({ active, payload, label }) => {
+const ChartTooltip = ({ active, payload, label, currency = "₹" }) => {
   if (!active || !payload?.length) return null;
   return (
     <div style={{
@@ -219,7 +219,7 @@ const ChartTooltip = ({ active, payload, label }) => {
     }}>
       <div style={{ color: "#94a3b8", marginBottom: 4, fontSize: "0.75rem" }}>{label}</div>
       <div style={{ color: "#6366f1", fontWeight: 800, fontSize: "1rem" }}>
-        ₹ {Number(payload[0].value).toFixed(2)}
+        {currency} {Number(payload[0].value).toFixed(2)}
       </div>
     </div>
   );
@@ -243,6 +243,9 @@ export default function StockPrediction() {
   const en = lang === "en";
 
   const [market, setMarket] = useState("us");          // "us" | "in"
+  const isUS = market === "us";
+  const currencySymbol = isUS ? "$" : "₹";
+  const locale = isUS ? "en-US" : "en-IN";
   const [symbol, setSymbol] = useState("AAPL");
   const [days, setDays] = useState(60);
   const [roiAmount, setRoiAmount] = useState(10000);
@@ -454,7 +457,7 @@ export default function StockPrediction() {
             {!liveFetching && livePrice && (
               <div className="sp-live-chip">
                 <span className="sp-live-dot" />
-                <strong>₹{livePrice.price.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
+                <strong>{currencySymbol}{livePrice.price.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
                 <span style={{ color: livePrice.change >= 0 ? '#22c55e' : '#ef4444', fontWeight: 600 }}>
                   {livePrice.change >= 0 ? '▲' : '▼'} {Math.abs(livePrice.change).toFixed(2)} ({Math.abs(livePrice.changePct).toFixed(2)}%)
                 </span>
@@ -596,7 +599,7 @@ export default function StockPrediction() {
                 <div className="sp-metric sp-metric--current">
                   <div className="sp-metric-label">{en ? "Current Price" : "தற்போதைய விலை"}</div>
                   <div className="sp-metric-val">
-                    ₹ {currentPrice != null ? Number(currentPrice).toFixed(2) : "—"}
+                    {currencySymbol} {currentPrice != null ? Number(currentPrice).toFixed(2) : "—"}
                   </div>
                   <div className="sp-metric-sub">{en ? "as of today" : "இன்று நிலவரம்"}</div>
                 </div>
@@ -604,7 +607,7 @@ export default function StockPrediction() {
                 <div className="sp-metric sp-metric--forecast">
                   <div className="sp-metric-label">{en ? `${days}-Day Forecast` : `${days} நாள் கணிப்பு`}</div>
                   <div className="sp-metric-val" style={{ color: diffColor }}>
-                    ₹ {predictedPrice != null ? Number(predictedPrice).toFixed(2) : "—"}
+                    {currencySymbol} {predictedPrice != null ? Number(predictedPrice).toFixed(2) : "—"}
                   </div>
                   {priceDiff != null && (
                     <div className="sp-metric-change" style={{ color: diffColor }}>
@@ -642,7 +645,7 @@ export default function StockPrediction() {
                   </div>
                   <div className="sp-roi-body">
                     <div className="sp-roi-field">
-                      <label>{en ? "Investment Amount (₹)" : "முதலீட்டுத் தொகை (₹)"}</label>
+                      <label>{en ? `Investment Amount (${currencySymbol})` : `முதலீட்டுத் தொகை (${currencySymbol})`}</label>
                       <input
                         type="number" value={roiAmount}
                         onChange={e => setRoiAmount(+e.target.value)}
@@ -654,10 +657,10 @@ export default function StockPrediction() {
                     <div className="sp-roi-result">
                       <label>{en ? "Projected Value" : "திட்டமிடப்பட்ட மதிப்பு"}</label>
                       <div className="sp-roi-amount" style={{ color: diffColor }}>
-                        ₹ {Number(roiProjected).toLocaleString("en-IN", { maximumFractionDigits: 2 })}
+                        {currencySymbol} {Number(roiProjected).toLocaleString(locale, { maximumFractionDigits: 2 })}
                       </div>
                       <div className="sp-roi-gain" style={{ color: diffColor }}>
-                        {priceDiff >= 0 ? "+" : ""}{((roiProjected - roiAmount)).toLocaleString("en-IN", { maximumFractionDigits: 0 })} ({priceDiff?.toFixed(2)}%)
+                        {priceDiff >= 0 ? "+" : ""}{((roiProjected - roiAmount)).toLocaleString(locale, { maximumFractionDigits: 0 })} ({priceDiff?.toFixed(2)}%)
                       </div>
                     </div>
                   </div>
@@ -682,7 +685,7 @@ export default function StockPrediction() {
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" />
                       <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#94a3b8" }} interval="preserveStartEnd" axisLine={false} tickLine={false} />
                       <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} domain={["dataMin - 5", "dataMax + 5"]} axisLine={false} tickLine={false} />
-                      <Tooltip content={<ChartTooltip />} />
+                      <Tooltip content={<ChartTooltip currency={currencySymbol} />} />
                       <Area type="monotone" dataKey="price" stroke="#6366f1" strokeWidth={2.5}
                         fill="url(#spGrad)" dot={false} activeDot={{ r: 5, fill: "#818cf8", strokeWidth: 0 }} />
                     </AreaChart>
