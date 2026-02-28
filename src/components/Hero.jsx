@@ -31,7 +31,7 @@ function StatItem({ value, suffix, label }) {
 export default function Hero() {
   const { lang } = useLanguage();
   const navigate = useNavigate();
-  const YOUTUBE_URL = 'https://youtu.be/oHAB6f-P-K0?si=dKdvJXiRLgAxrDQd';
+  const YOUTUBE_URL = 'https://youtu.be/oHAB6f-P-K0?si=-SqnWlFMKnnY6Exi';
   const t = {
     en: {
       badge: ' AI Powered Financial Intelligence',
