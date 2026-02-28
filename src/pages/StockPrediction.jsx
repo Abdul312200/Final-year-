@@ -498,16 +498,6 @@ export default function StockPrediction() {
             </div>
           </div>
 
-          {/* ── Backend status chip ── */}
-          <div className={`sp-backend-status sp-backend-status--${backendStatus}`}>
-            <span className="sp-backend-dot" />
-            {backendStatus === 'checking'
-              ? (en ? 'Checking backend connection…' : 'இணைப்பு சரிபார்க்கிறது…')
-              : backendStatus === 'online'
-                ? (en ? 'ML Backend: Connected' : 'ML சேவையகம்: இணைக்கப்பட்டது')
-                : (en ? 'ML Backend: Offline' : 'ML சேவையகம்: இணைப்பில்லை')}
-          </div>
-
           {/* Run button */}
           <button className="sp-run-btn" onClick={handlePredict} disabled={isLoading}>
             {isLoading ? (
