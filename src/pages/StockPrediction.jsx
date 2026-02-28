@@ -253,7 +253,6 @@ export default function StockPrediction() {
   const [hasPredicted, setHasPredicted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [isDemoMode, setIsDemoMode] = useState(false);
   const [backendStatus, setBackendStatus] = useState('checking'); // 'checking' | 'online' | 'offline'
   const [currentPrice, setCurrentPrice] = useState(null);
   const [predictedPrice, setPredictedPrice] = useState(null);
@@ -310,7 +309,6 @@ export default function StockPrediction() {
     setIsLoading(true);
     setHasPredicted(false);
     setError(null);
-    setIsDemoMode(false);
     setHistoryData([]);
     setInvestmentAdvice("");
     setAdviceMeta(null);
@@ -353,7 +351,6 @@ export default function StockPrediction() {
       setHistoryData(mock.history);
       setInvestmentAdvice(mock.advice);
       setAdviceMeta({ change_pct: mock.change_pct, volatility: mock.volatility });
-      setIsDemoMode(true);
       setBackendStatus('offline');
     } finally {
       setIsLoading(false);
@@ -568,31 +565,6 @@ export default function StockPrediction() {
           {/* Results */}
           {hasPredicted && !isLoading && !error && (
             <>
-              {/* Demo Mode notice */}
-              {isDemoMode && (
-                <div className={`sp-demo-notice${backendStatus === 'online' ? ' sp-demo-notice--recovered' : ''}`}>
-                  <span>{backendStatus === 'online' ? '✅' : '🖥️'}</span>
-                  <div>
-                    <strong>
-                      {backendStatus === 'online'
-                        ? (en ? 'Backend Now Online!' : 'சேவையகம் இப்போது இணைந்துள்ளது!')
-                        : backendStatus === 'checking'
-                          ? (en ? 'Demo Mode — Checking Backend…' : 'டெமோ பயன்முறை — சரிபார்க்கிறது…')
-                          : (en ? 'Demo Mode — Backend Offline' : 'டெமோ பயன்முறை — சேவையகம் இல்லை')}
-                    </strong>
-                    <span>
-                      {backendStatus === 'online'
-                        ? (en
-                          ? ' Backend is connected. Click ▶ Run Forecast again to get live ML predictions.'
-                          : ' சேவையகம் இணைக்கப்பட்டது. நேரடி ML கணிப்புகளுக்கு மீண்டும் கணிப்பை இயக்கவும்.')
-                        : (en
-                          ? ' Showing simulated statistical data. Connect the ML backend server to see live predictions.'
-                          : ' சிமுலேட்டட் புள்ளிவிவர தரவு காட்டப்படுகிறது. நேரடி கணிப்புகளுக்கு ML பின்னணி சேவையகத்தை இணைக்கவும்.')}
-                    </span>
-                  </div>
-                </div>
-              )}
-
               {/* Price metrics */}
 
               <div className="sp-metrics-row">
